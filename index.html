@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111318">
+  <title>ClearShot — Photo Studio</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="ClearShot home">
+      <span class="brand-mark">C</span>
+      <span>Clear<span class="brand-light">Shot</span><small>PHOTO STUDIO</small></span>
+    </a>
+    <div class="top-actions">
+      <span class="privacy"><span class="privacy-dot"></span> Processed on your device</span>
+      <button id="resetBtn" class="button button-quiet" disabled>Reset edits</button>
+      <button id="exportBtn" class="button button-primary" disabled>Export image <span aria-hidden="true">↗</span></button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section class="workspace">
+      <div class="workspace-head">
+        <div>
+          <p class="eyebrow">YOUR CREATIVE WORKSPACE</p>
+          <h1>Make every detail count.</h1>
+          <p class="subhead">A hands-on photo editor. Natural results, your control.</p>
+        </div>
+        <div class="head-tools">
+          <button id="compareBtn" class="button button-outline" disabled>◐ Compare original</button>
+          <button id="fitBtn" class="icon-button" title="Fit image" aria-label="Fit image" disabled>⌗</button>
+        </div>
+      </div>
+
+      <div id="dropZone" class="drop-zone">
+        <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp,image/avif" hidden>
+        <div id="emptyState" class="empty-state">
+          <div class="upload-symbol">↑</div>
+          <h2>Bring your photo to life</h2>
+          <p>Drop an image here, or choose a file from your device.</p>
+          <button id="chooseBtn" class="button button-primary">Choose an image</button>
+          <div class="file-note">JPG, PNG, WebP or AVIF · stays on your device</div>
+        </div>
+        <div id="editorStage" class="editor-stage" hidden>
+          <div class="canvas-wrap" id="canvasWrap">
+            <canvas id="photoCanvas" aria-label="Edited photo preview"></canvas>
+            <div id="originalOverlay" class="original-overlay" hidden><span>ORIGINAL</span></div>
+          </div>
+          <div class="stage-footer">
+            <span id="imageInfo">No image loaded</span>
+            <span id="previewStatus">Preview · Fit</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-strip">
+        <div class="quick-presets">
+          <span class="strip-label">QUICK LOOKS</span>
+          <button class="preset active" data-preset="none">Original</button>
+          <button class="preset" data-preset="balanced">Balanced</button>
+          <button class="preset" data-preset="bright">Brighten</button>
+          <button class="preset" data-preset="crisp">Crisp</button>
+          <button class="preset" data-preset="warm">Warm</button>
+          <button class="preset" data-preset="mono">Mono</button>
+        </div>
+        <p class="hint">Tip: small adjustments usually look more natural.</p>
+      </div>
+    </section>
+
+    <aside class="controls-panel">
+      <div class="panel-heading">
+        <div><p class="eyebrow">DEVELOP</p><h2>Adjustments</h2></div>
+        <button id="autoBtn" class="auto-button" disabled>✦ Auto enhance</button>
+      </div>
+      <div class="control-tabs" role="tablist" aria-label="Adjustment groups">
+        <button class="tab active" data-tab="light" role="tab" aria-selected="true">Light</button>
+        <button class="tab" data-tab="color" role="tab" aria-selected="false">Color</button>
+        <button class="tab" data-tab="detail" role="tab" aria-selected="false">Detail</button>
+        <button class="tab" data-tab="effects" role="tab" aria-selected="false">Effects</button>
+      </div>
+
+      <div class="control-content" data-panel="light">
+        <div class="section-title"><span>LIGHT</span><button class="reset-group" data-reset="light">Reset</button></div>
+        <div class="slider-control"><div class="slider-label"><label for="exposure">Exposure</label><output id="exposureOut">0.0</output></div><input id="exposure" data-key="exposure" type="range" min="-2" max="2" step=".1" value="0"><div class="range-ends"><span>−2 EV</span><span>+2 EV</span></div></div>
+        <div class="slider-control"><div class="slider-label"><label for="brightness">Brightness</label><output id="brightnessOut">0</output></div><input id="brightness" data-key="brightness" type="range" min="-60" max="60" step="1" value="0"></div>
+        <div class="slider-control"><div class="slider-label"><label for="contrast">Contrast</label><output id="contrastOut">0</output></div><input id="contrast" data-key="contrast" type="range" min="-60" max="60" step="1" value="0"></div>
+        <div class="slider-control"><div class="slider-label"><label for="highlights">Highlights</label><output id="highlightsOut">0</output></div><input id="highlights" data-key="highlights" type="range" min="-100" max="100" step="1" value="0"></div>
+        <div class="slider-control"><div class="slider-label"><label for="shadows">Shadows</label><output id="shadowsOut">0</output></div><input id="shadows" data-key="shadows" type="range" min="-100" max="100" step="1" value="0"></div>
+        <div class="slider-control"><div class="slider-label"><label for="whites">Whites</label><output id="whitesOut">0</output></div><input id="whites" data-key="whites" type="range" min="-100" max="100" step="1" value="0"></div>
+        <div class="slider-control"><div class="slider-label"><label for="blacks">Blacks</label><output id="blacksOut">0</output></div><input id="blacks" data-key="blacks" type="range" min="-100" max="100" step="1" value="0"></div>
+      </div>
+
+      <div class="control-content" data-panel="color" hidden>
+        <div class="section-title"><span>COLOR</span><button class="reset-group" data-reset="color">Reset</button></div>
+        <div class="slider-control"><div class="slider-label"><label for="saturation">Saturation</label><output id="saturationOut">0</output></div><input id="saturation" data-key="saturation" type="range" min="-100" max="100" step="1" value="0"></div>
+        <div class="slider-control"><div class="slider-label"><label for="vibrance">Vibrance</label><output id="vibranceOut">0</output></div><input id="vibrance" data-key="vibrance" type="range" min="-100" max="100" step="1" value="0"></div>
+        <div class="slider-control"><div class="slider-label"><label for="temperature">Temperature</label><output id="temperatureOut">0</output></div><input id="temperature" data-key="temperature" type="range" min="-100" max="100" step="1" value="0"><div class="range-ends"><span>Cool</span><span>Warm</span></div></div>
+        <div class="slider-control"><div class="slider-label"><label for="tint">Tint</label><output id="tintOut">0</output></div><input id="tint" data-key="tint" type="range" min="-100" max="100" step="1" value="0"></div>
+      </div>
+
+      <div class="control-content" data-panel="detail" hidden>
+        <div class="section-title"><span>DETAIL</span><button class="reset-group" data-reset="detail">Reset</button></div>
+        <div class="slider-control"><div class="slider-label"><label for="sharpness">Sharpening</label><output id="sharpnessOut">0</output></div><input id="sharpness" data-key="sharpness" type="range" min="0" max="100" step="1" value="0"></div>
+        <div class="slider-control"><div class="slider-label"><label for="denoise">Noise reduction</label><output id="denoiseOut">0</output></div><input id="denoise" data-key="denoise" type="range" min="0" max="60" step="1" value="0"></div>
+        <div class="info-note"><strong>Good to know</strong><p>Sharpening improves edge definition, but cannot recover detail that was never captured. Strong noise reduction can soften fine texture.</p></div>
+      </div>
+
+      <div class="control-content" data-panel="effects" hidden>
+        <div class="section-title"><span>FINISHING</span><button class="reset-group" data-reset="effects">Reset</button></div>
+        <div class="slider-control"><div class="slider-label"><label for="vignette">Vignette</label><output id="vignetteOut">0</output></div><input id="vignette" data-key="vignette" type="range" min="-100" max="100" step="1" value="0"></div>
+        <div class="slider-control"><div class="slider-label"><label for="grain">Film grain</label><output id="grainOut">0</output></div><input id="grain" data-key="grain" type="range" min="0" max="40" step="1" value="0"></div>
+        <div class="section-title section-spaced"><span>TRANSFORM</span></div>
+        <div class="transform-row"><button id="rotateLeft" class="button button-outline" disabled>↶ Rotate left</button><button id="rotateRight" class="button button-outline" disabled>↷ Rotate right</button></div>
+        <div class="transform-row"><button id="flipH" class="button button-outline" disabled>⇆ Flip horizontal</button><button id="flipV" class="button button-outline" disabled>⇅ Flip vertical</button></div>
+      </div>
+
+      <div class="panel-footer">
+        <div class="export-summary"><span class="status-dot"></span><span id="statusText">Ready when you are</span></div>
+        <button id="downloadBtn" class="button button-primary button-full" disabled>Download enhanced image</button>
+        <p class="fine-print">ClearShot edits in your browser. Your photos are not uploaded.</p>
+      </div>
+    </aside>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
